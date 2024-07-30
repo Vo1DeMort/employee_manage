@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+  <form method="POST" class="container mt-4">
+      {% csrf_token %}
+      <div class="mb-3">
+          {{ employee_form.as_p }}
+      </div>
+      <div id="education-forms">
+          {% for form in education_forms %}
+              <div class="row mb-3 education-form-row">
+                  <div class="col-md-4">
+                      <label class="form-label">Education Type: {{ form.edu_type }}</label>
+                  </div>
+                  <div class="col-md-4">
+                      <label class="form-label">Description: {{ form.description }}</label>
+                  </div>
+                  <div class="col-md-4">
+                      <label class="form-label">Graduation Year: {{ form.grad_year }}</label>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+      <input type="hidden" name="education_count" id="education_count" value="1">
+      <div class="mt-3">
+          <button type="button" class="btn btn-primary" onclick="addEducation()">More Edu</button>
+      </div>
+      <div class="mt-3">
+          <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+  </form>
+
+  <script>
+      let educationCount = 1;
+
+      function addEducation() {
+          const educationFormsDiv = document.getElementById('education-forms');
+          const newForm = document.createElement('div');
+          newForm.classList.add('education-form-row'); 
+          newForm.innerHTML = `
+              <label for="id_${educationCount}-edu_type">Education Type:</label>
+              <input type="text" name="${educationCount}-edu_type" id="id_${educationCount}-edu_type">
+
+              <label for="id_${educationCount}-description">Description:</label>
+              <textarea name="${educationCount}-description" id="id_${educationCount}-description" rows="1"></textarea>
+
+              <label for="id_${educationCount}-grad_year">Graduation Year:</label>
+              <input type="number" name="${educationCount}-grad_year" id="id_${educationCount}-grad_year" min="1900" max="2100" step="1"> 
+          `;
+          educationFormsDiv.appendChild(newForm);
+          educationCount++;
+          document.getElementById('education_count').value = educationCount;
+      }
+  </script>
+
+{% endblock %}
+

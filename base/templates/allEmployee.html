@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">DOB</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Email</th>
+        <th scope="col">State</th>
+        <th scope="col">Address</th>
+        <th scope="col">Skills</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    {% for employee in employees  %}
+        <tr>
+          <td>{{employee.name}}</td>
+          <td>{{employee.date_of_birth}}</td>
+          <td>{{employee.get_gender_display}}</td>
+          <td>{{employee.email}}</td>
+          <td>{{employee.get_state_display}}</td>
+          <td>{{employee.address}}</td>
+          <td>{{employee.skills}}</td>
+          <td>
+            <a href="{% url 'education' employee.pk %}" class="btn btn-primary">Edu</a>
+          </td>
+
+        </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+
+
+  <div class="container mt-4">
+  <div class="text-center mb-4">
+    <button class="btn btn-success me-2" onclick="exportToExcel()">Export Employee</button>
+    <button class="btn btn-success" onclick="exportEduToExcel()">Export Education</button>
+  </div>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <!-- Import Employees Form -->
+    <div class="col-md-6 col-lg-4 mb-3">
+      <form method="post" enctype="multipart/form-data" action="{% url 'importEmployee' %}" class="d-flex align-items-center">
+        {% csrf_token %}
+        <input type="file" name="file" class="form-control me-2" accept=".xlsx">
+        <button type="submit" class="btn btn-primary">Import Employees</button>
+      </form>
+    </div>
+
+    <!-- Import Educations Form -->
+    <div class="col-md-6 col-lg-4 mb-3">
+      <form method="post" enctype="multipart/form-data" action="{% url 'importEdu' %}" class="d-flex align-items-center">
+        {% csrf_token %}
+        <input type="file" name="file" class="form-control me-2" accept=".xlsx">
+        <button type="submit" class="btn btn-primary">Import Educations</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+  <br/>
+
+  <nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1" aria-label="First">
+          <span aria-hidden="true">&laquo;&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    {% endif %}
+
+    <li class="page-item disabled">
+      <span class="page-link">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+          <span aria-hidden="true">&raquo;&raquo;</span>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+
+<script>
+  function exportToExcel() {
+    const fileName = prompt("Enter file name:", "employees.xlsx");
+    if (fileName) {
+      window.location.href = "{% url 'exportEmployee' %}?file_name=" + fileName;
+    }
+  }
+
+  function exportEduToExcel() {
+    const fileName = prompt("Enter file name:", "education.xlsx");
+    if (fileName) {
+      window.location.href = "{% url 'exportEdu' %}?file_name=" + fileName;
+    }
+  }
+
+  // for showing success or error msg
+  document.addEventListener("DOMContentLoaded", function() {
+    {% if messages %}
+      {% for message in messages %}
+        var alertType = "alert-success";
+        if ("{{ message.tags }}" == "error") {
+          alertType = "alert-danger";
+        }
+        var alert = `
+          <div class="alert ${alertType} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`;
+        document.body.insertAdjacentHTML("afterbegin", alert);
+      {% endfor %}
+    {% endif %}
+  });
+</script>
+
+
+{% endblock %}
+
+

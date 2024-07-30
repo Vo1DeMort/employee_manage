@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <h5 class="my-4">Education of {{employee.name}}</h5>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Description</th>
+        <th scope="col">Graduation Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for education in education_list %}
+        <tr>
+          <td>{{ education.edu_type }}</td>
+          <td>{{ education.description }}</td>
+          <td>{{ education.grad_year }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
