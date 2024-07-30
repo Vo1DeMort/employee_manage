@@ -7,35 +7,10 @@ from django.db.models import Q
 from django.http import HttpResponse
 import datetime
 import pandas as pd
+
 # from openpyxl import load_workbook
 from django.urls import reverse
 from django.contrib import messages
-
-
-"""
-def employee_create_view(request):
-    if request.method == "POST":
-        employee_form = EmployeeForm(request.POST)
-        education_forms = [
-            EducationForm(request.POST, prefix=str(i))
-            for i in range(int(request.POST["education_count"]))
-        ]
-        if employee_form.is_valid() and all([ef.is_valid() for ef in education_forms]):
-            employee = employee_form.save()
-            for ef in education_forms:
-                education = ef.save(commit=False)
-                education.employee = employee
-                education.save()
-            return redirect("all_employee")
-    else:
-        employee_form = EmployeeForm()
-        education_forms = [EducationForm(prefix="0")]
-    return render(
-        request,
-        "employee_form.html",
-        {"employee_form": employee_form, "education_forms": education_forms},
-    )
-"""
 
 
 def employee_create_view(request):
@@ -69,7 +44,7 @@ class AllEmployee(ListView):
     model = Employee
     template_name = "allEmployee.html"
     context_object_name = "employees"
-    paginate_by = 2
+    paginate_by = 5
 
 
 # can be searched via email or name
