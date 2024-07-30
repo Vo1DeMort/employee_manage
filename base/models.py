@@ -26,7 +26,7 @@ class Employee(models.Model):
     email = models.EmailField(max_length=100)
     state = models.CharField(max_length=3, choices=STATE)
     address = models.CharField(max_length=1000)
-    skills = models.TextField(null=True, blank=True)  # change this to char field
+    skills = models.CharField(max_length=200,null=True, blank=True)  # change this to char field
 
     class Meta:
         ordering = ["name"]

@@ -38,3 +38,17 @@ things to fix
     )
 
 testing git branch
+
+Comment Block
+
+Select the lines in visual mode (V for line visual mode).
+Press :
+Type normal I# and press Enter.
+
+
+Uncomment Block
+
+Select the lines in visual mode (V for line visual mode).
+Press :
+Type normal ^x and press Enter.
+
